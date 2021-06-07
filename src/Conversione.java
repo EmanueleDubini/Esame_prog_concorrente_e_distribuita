@@ -19,4 +19,6 @@ public class Conversione implements Serializable {
         return valuta;
     }
 
+    // PROREPARA
+
 }
