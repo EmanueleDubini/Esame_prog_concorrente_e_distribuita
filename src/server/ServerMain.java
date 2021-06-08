@@ -20,7 +20,13 @@ public class ServerMain {
         registry.rebind("Pubblicatore", obj);
         System.out.println("Server Pubblicatore Pronto...");
 
-
+        // Esecuzione
+        ProduttoreNotizie pn1 = new ProduttoreNotizie(); pn1.start();
+        ProduttoreNotizie pn2 = new ProduttoreNotizie(); pn2.start();
+        ProduttoreNotizie pn3 = new ProduttoreNotizie(); pn3.start();
+        ProduttoreNotizie pn4 = new ProduttoreNotizie(); pn4.start();
+        ProduttoreNotizie pn5 = new ProduttoreNotizie(); pn5.start();
 
     }//END_Main
-}
+
+}//END_ServerMain_Class

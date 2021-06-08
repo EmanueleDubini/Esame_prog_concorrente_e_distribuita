@@ -1,5 +1,8 @@
 package server;
 
+import common.Editoriale;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -10,10 +13,12 @@ public class ProduttoreNotizie extends Thread{
     Random random = new Random(); // generatore di numero casuale da associare a ogni notizia per renderla diversa
 
     public ProduttoreNotizie() {
+        super();
     }
 
     @Override
     public void run() {
+        System.out.println("ProduttoreNotize running...");
         EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
         String notizia = "Notizia di " + tipo + " " + random.nextInt(10000);
 
