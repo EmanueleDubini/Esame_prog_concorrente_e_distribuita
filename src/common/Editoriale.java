@@ -1,7 +1,9 @@
 package common;
 
+import client.FruitoreNotizie;
 import server.EditorialeTipo;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Oggetto condiviso Editoriale(tipo, contenuto) che deve essere Serializable
@@ -11,13 +13,11 @@ public class Editoriale implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final EditorialeTipo tipo;
-    private final String contenuto;
-    private final String ClientName; // nome del Client che si collega, cosi sappiamo chi si collega
+    private String contenuto = "";
 
-    public Editoriale(EditorialeTipo tipo, String contenuto, String clientName){
+    public Editoriale(EditorialeTipo tipo){
         this.tipo = tipo;
-        this.contenuto = contenuto;
-        ClientName = clientName;
+        //this.contenuto = contenuto;
     }
 
     public String getContenuto() {
@@ -28,5 +28,12 @@ public class Editoriale implements Serializable {
         return tipo;
     }
 
-    public String getClientName() { return ClientName; }
+    public void concatenaNotizia(String contenuto) {
+        this.contenuto += contenuto;
+    }
+
+    @Override
+    public String toString() {
+        return "Tipo: " + tipo.toString() + " Contenuto: " + contenuto;
+    }
 }

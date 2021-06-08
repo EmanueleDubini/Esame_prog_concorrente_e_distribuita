@@ -1,5 +1,7 @@
 package client;
 
+import common.Editoriale;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -11,10 +13,9 @@ public interface FruitoreNotizie extends Remote {
 
     public final static int PORT = 1200;
 
-    public void richiestaTipoEditoriale(common.Editoriale value) throws RemoteException; // Client interessato a ricevere tipi editoriali
-    public void stopRichiestaTipoEditoriale(common.Editoriale value) throws RemoteException; // Client NON interessato a ricevere tipi editoriali
+    // METODI remoti chiamati dal Server
+
+    public void notifica(Editoriale value) throws RemoteException; // passa l'editoriale da stampare
     public String getName() throws RemoteException; //richiesta del nome del Client
 
-    // riceve raccorta di editoriali
-    //public void notifica(common.Editoriale value) throws RemoteException; //todo
 }

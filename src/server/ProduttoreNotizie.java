@@ -18,11 +18,18 @@ public class ProduttoreNotizie extends Thread{
 
     @Override
     public void run() {
-        System.out.println("ProduttoreNotize running...");
-        EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
-        String notizia = "Notizia di " + tipo + " " + random.nextInt(10000);
-
-        // todo
-        // scrittura delle notizie nell'arraylist
+        while (true){
+            System.out.println("ProduttoreNotizie " + currentThread().getName() + " running...");
+            EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
+            String notizia = " Notizia di " + tipo + " " + random.nextInt(10000);
+            System.out.println("DEBUG: Produttore notizia: " + notizia);
+            PubblicatoreImpl.registraNotizia(tipo, notizia);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                System.err.println("ProduttoreNotizie exception: " + e.toString());
+                e.printStackTrace();
+            }
+        }
     }
 }

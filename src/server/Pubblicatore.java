@@ -14,7 +14,7 @@ public interface Pubblicatore extends Remote {
 
     public final static int PORT = 1200;
 
-    //METODI REMOTI
+    // METODI remoti chiamati dal Client
 
     // gli passiamo il tipo di editoriale di cui fa richiesta, e un oggetto Client
     // Boolena perche ci serve sapere se la sottoscrizione è andata a buon fine o no
@@ -23,6 +23,4 @@ public interface Pubblicatore extends Remote {
     // tipo void perche se il Client si disconnette il server non ci puo fare nulla, senza controllo
     public void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException;
 
-    // Oggetto editoriale serializable
-    boolean editoriale(Editoriale e) throws RemoteException;
 }
