@@ -18,6 +18,6 @@ public class ProduttoreNotizie extends Thread{
         String notizia = "Notizia di " + tipo + " " + random.nextInt(10000);
 
         // todo
-        // scrittura delle notize nell'arraylist
+        // scrittura delle notizie nell'arraylist
     }
 }

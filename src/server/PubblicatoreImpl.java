@@ -4,13 +4,14 @@ import client.FruitoreNotizie;
 import common.Editoriale;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
+/**
+ * IMPLEMENTAZIONE del Server
+ */
 public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicatore {
-
+    private static final long serialVersionUID = 1L;
     private static  ArrayList<Editoriale> raccoltaEditoriali;
 
 
@@ -21,8 +22,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
     // IMPLEMENTAZIONE METODI
     @Override
-    public synchronized void sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
-
+    public synchronized boolean sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
+        return false;
     }
 
     @Override
@@ -30,11 +31,16 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
     }
 
+    @Override
+    public synchronized boolean editoriale(Editoriale e) throws RemoteException {
+        return false;
+    }
+
     private static ArrayList<Editoriale> inizializzaEditoriali() {
         ArrayList<Editoriale> editoriali = new ArrayList<>();
 
         for (EditorialeTipo t  : EditorialeTipo.values()) {
-            editoriali.add(new Editoriale(t, null)); // quando l'editoriale non contiene notizie, viene messo a null
+            editoriali.add(new Editoriale(t, null, null)); // quando l'editoriale non contiene notizie, viene messo a null
         }
         return editoriali;
     }
