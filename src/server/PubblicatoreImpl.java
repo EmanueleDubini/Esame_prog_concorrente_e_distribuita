@@ -8,8 +8,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static server.EditorialeTipo.politica;
-
 /**
  * IMPLEMENTAZIONE del Server
  */
@@ -29,9 +27,20 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
     private final HashMap<String, InfoAbbonato> listaFruitori = new HashMap<>();
 
 
-    // COSTRUTTORE
+    /**
+     * COSTRUTTORE
+     */
     public PubblicatoreImpl() throws RemoteException {
         raccoltaEditoriali = inizializzaEditoriali();
+    }
+
+    private static ArrayList<Editoriale> inizializzaEditoriali() {
+        ArrayList<Editoriale> editoriali = new ArrayList<>();
+
+        for (EditorialeTipo t  : EditorialeTipo.values()) {
+            editoriali.add(new Editoriale(t)); // quando l'editoriale non contiene notizie, viene messo a null
+        }
+        return editoriali;
     }
 
     // IMPLEMENTAZIONE METODI remoti chiamati dal Client
@@ -61,7 +70,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                     if (abbonato.isPolitica()) {
                         //il fruitore è gia abbonato a questo editoriale
                         //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
-                        fruitoreNotizia.giaSottoscritto();
+                        fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale politica");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
                         abbonato.setPolitica(true);
@@ -73,7 +82,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                     if (abbonato.isAttualita()) {
                         //il fruitore è gia abbonato a questo editoriale
                         //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
-                        fruitoreNotizia.giaSottoscritto();
+                        fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale attualita");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
                         abbonato.setAttualita(true);
@@ -85,7 +94,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                     if (abbonato.isScienza()) {
                         //il fruitore è gia abbonato a questo editoriale
                         //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
-                        fruitoreNotizia.giaSottoscritto();
+                        fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale scienza");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
                         abbonato.setScienza(true);
@@ -97,7 +106,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                     if (abbonato.isSport()) {
                         //il fruitore è gia abbonato a questo editoriale
                         //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
-                        fruitoreNotizia.giaSottoscritto();
+                        fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale sport");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
                         abbonato.setSport(true);
@@ -144,18 +153,64 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      */
     @Override
     public synchronized void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
+        //synchronized perchè possono essere chiamati da client multipli
 
-    }
+        //nome del fruitore che chiama il metodo sottoscrivi
+        String nomeFruitore = fruitoreNotizia.getName();
 
+        if (listaFruitori.containsKey(nomeFruitore)) {
+            //se il nome del fruitore e contenuto nella lista fruitori, quindi e gia abbonato a un editoriale
 
-    private static ArrayList<Editoriale> inizializzaEditoriali() {
-        ArrayList<Editoriale> editoriali = new ArrayList<>();
+            //recupero le informazioni del fruitore gia presente nel server
+            InfoAbbonato abbonato = listaFruitori.get(nomeFruitore);
 
-        for (EditorialeTipo t  : EditorialeTipo.values()) {
-            editoriali.add(new Editoriale(t)); // quando l'editoriale non contiene notizie, viene messo a null
+            //disiscrivo il fruitore che chiama il metodo dall'editorialea cui richiede di essere disiscritto
+            switch (tipo) {
+                case politica:
+                    if (abbonato.isPolitica()) {
+                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+
+                        abbonato.setPolitica(false);
+                    }
+                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    break;
+
+                case attualita:
+                    if (abbonato.isAttualita()) {
+                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+
+                        abbonato.setAttualita(false);
+                    }
+                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    break;
+
+                case scienza:
+                    if (abbonato.isScienza()) {
+                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+
+                        abbonato.setScienza(false);
+                    }
+                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    break;
+
+                case sport:
+                    if (abbonato.isSport()) {
+                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+
+                        abbonato.setSport(false);
+                    }
+                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    break;
+            }
+        } else {
+            //eseguito se il fruitore non è gia salvato nel server, non ha richiesto ancora nessun editoriale, avvisiamo che il fruitore non e sottoscritto a nessun editoriale
+
+            fruitoreNotizia.avviso("SERVER: fruitore non ancora sottoscritto a nessun editoriale");
+
         }
-        return editoriali;
     }
+
+    // IMPLEMENTAZIONE METODI chiamati dal Thread ProduttoreNotizie
 
     /**
      * Inserisce la notizia generata dal produttoreNotizie all'interno dei vari editoriali in base al tipo
@@ -186,22 +241,32 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         }
     }
 
+    /**
+     * Metodo che viene chiamato ogni 5 secondi dal server che trasmette tutti gli editoriali ai feruitoriNotizie interessati,
+     * dopodiche elimina le notizie trasmesse dagli editoriali per poter contenere le nuove notizie generate
+     */
+    private synchronized void trasmettiEditorialiAlClient() {
+    }
+
     // Esegue le azioni della macchina a stati (trasmette editoriale T-cancella elenco notizie di T)
     public void exec() throws InterruptedException {
 
-        System.err.println(raccoltaEditoriali.get(0).toString());
-        System.err.println(raccoltaEditoriali.get(1).toString());
-        System.err.println(raccoltaEditoriali.get(2).toString());
-        System.err.println(raccoltaEditoriali.get(3).toString());
+
 
         while(true){
 
 
-            //Metodo synchronized: trasmetti editoriali
+            trasmettiEditorialiAlClient();
 
+            System.err.println(raccoltaEditoriali.get(0).toString());
+            System.err.println(raccoltaEditoriali.get(1).toString());
+            System.err.println(raccoltaEditoriali.get(2).toString());
+            System.err.println(raccoltaEditoriali.get(3).toString());
 
             Thread.sleep(5000);
         }
     }
+
+
 
 }//END_Class

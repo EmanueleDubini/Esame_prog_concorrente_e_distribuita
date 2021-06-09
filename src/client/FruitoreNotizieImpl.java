@@ -18,13 +18,13 @@ public class FruitoreNotizieImpl implements FruitoreNotizie{
     }
 
     @Override
-    public void notifica(Editoriale value) throws RemoteException {
+    public void trasmettiEditoriale(Editoriale value) throws RemoteException {
 
     }
 
     @Override
-    public void giaSottoscritto() throws RemoteException{
-        System.out.println("sottoscrizione gia effettuata all'editoriale rischiesto");
+    public void avviso(String avviso) throws RemoteException{
+        System.out.println(avviso);
     }
 
     @Override

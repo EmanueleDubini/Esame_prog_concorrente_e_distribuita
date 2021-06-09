@@ -18,8 +18,9 @@ public class ProduttoreNotizie extends Thread{
 
     @Override
     public void run() {
+        System.out.println("ProduttoreNotizie " + currentThread().getName() + " running...");
+
         while (true){
-            System.out.println("ProduttoreNotizie " + currentThread().getName() + " running...");
             EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
             String notizia = " Notizia di " + tipo + " " + random.nextInt(10000);
             System.out.println("DEBUG: Produttore notizia: " + notizia);
