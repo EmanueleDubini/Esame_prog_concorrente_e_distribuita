@@ -103,23 +103,30 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
 
-        //System.setSecurityManager(new SecurityManager());
         System.out.println("il client e stato implementato in modo che esegua all'infinito");
 
-        String host = args.length >= 1 ? args[0] : null;
-        Registry registry = LocateRegistry.getRegistry(host, FruitoreNotizie.PORT);
-        Pubblicatore stub = (Pubblicatore) registry.lookup("Pubblicatore");
+        try {
+            String host = args.length >= 1 ? args[0] : null;
+            Registry registry = LocateRegistry.getRegistry(host, FruitoreNotizie.PORT);
+            Pubblicatore stub = (Pubblicatore) registry.lookup("Pubblicatore");
 
-       FruitoreNotizieImpl me = new FruitoreNotizieImpl("Pippo", stub);//todo definire i nomi dei client dal server
 
-        /*stub.sottoscrivi(EditorialeTipo.politica, me);
-        stub.sottoscrivi(EditorialeTipo.attualita, me);
-        stub.sottoscrivi(EditorialeTipo.scienza, me);
-        stub.sottoscrivi(EditorialeTipo.sport, me);*/
+            FruitoreNotizieImpl me = new FruitoreNotizieImpl("Pippo", stub);//todo definire i nomi dei client dal server
 
-        me.exec();
+
+
+            /*stub.sottoscrivi(EditorialeTipo.politica, me);
+            stub.sottoscrivi(EditorialeTipo.attualita, me);
+            stub.sottoscrivi(EditorialeTipo.scienza, me);
+            stub.sottoscrivi(EditorialeTipo.sport, me);*/
+
+            me.exec();
+
+        }catch(Exception e){
+            System.err.println("SERVER NOT STARTED");
+        }
 
         //todo gestire quando viene avviato prima il client del server
 
