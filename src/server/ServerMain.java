@@ -1,5 +1,7 @@
 package server;
 
+import common.IpAddressServer;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -15,7 +17,7 @@ public class ServerMain {
             registry.rebind("Pubblicatore", obj);
             creazioneNotizie();
             Thread.sleep(1000);
-            System.out.println("Server Pubblicatore Pronto...");
+            System.out.println("Server Pubblicatore: " + IpAddressServer.getServerAddress() + " Pronto...");
             obj.exec();
         } catch (Exception e){
             System.err.println("Server exception: " + e.toString());
