@@ -45,6 +45,13 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         return editoriali;
     }
 
+    private String nomeUnivoco() {
+        long i = 0;
+        i++;
+        return "Fruitore-" + i;
+    }
+
+
     // IMPLEMENTAZIONE METODI remoti chiamati dal Client
 
     /**
@@ -58,8 +65,9 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
     public synchronized boolean sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
         //synchronized perchè possono essere chiamati da client multipli
 
-        //nome del fruitore che chiama il metodo sottoscrivi
-        String nomeFruitore = fruitoreNotizia.getNome();
+        //setta il nome del fruitore che chiama il metodo sottoscrivi, il nome viene scelto dal server dato che è l'entita che conoscera tutti i client
+        String nomeFruitore = nomeUnivoco();
+        fruitoreNotizia.setNome(nomeFruitore);
 
         if (listaFruitori.containsKey(nomeFruitore)) {
             //se il nome del fruitore e contenuto nella lista fruitori, quindi e gia abbonato a un editoriale
@@ -146,6 +154,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         }
     }
 
+
     /**
      * metodo che rimuove un FruitoreNotizie che si vuole disiscrivere ad un editoriale modificando la lista degli abbonati ad un editoriale
      * @param tipo tipo di editoriale a cui ci si vuole disiscrivere
@@ -206,8 +215,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
             if(!abbonato.isPolitica() && !abbonato.isAttualita() && !abbonato.isScienza() && !abbonato.isSport()){
                 //se un Fruitore notizie non ha piu nessuna sottoscrizione a nessun editoriale allora viene tolto dalla memoria del server
-                listaFruitori.remove(abbonato);
-                fruitoreNotizia.avviso("SERVER: fruitore non ancora sottoscritto a nessun editoriale");
+                listaFruitori.remove(nomeFruitore, abbonato);
+                fruitoreNotizia.avviso("SERVER: fruitore non possiede sottoscrizioni a nessun editoriale");
             }
         }
             //eseguito se il fruitore non è gia salvato nel server, non ha richiesto ancora nessun editoriale, avvisiamo che il fruitore non e sottoscritto a nessun editoriale
@@ -258,11 +267,6 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         for (InfoAbbonato fruitore : this.listaFruitori.values()) {
             //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
 
-            if(!fruitore.isPolitica() && !fruitore.isAttualita() && !fruitore.isScienza() && !fruitore.isSport()){
-                //se un Fruitore notizie non ha piu nessuna sottoscrizione a nessun editoriale allora viene tolto dalla memoria del server
-                listaFruitori.remove(fruitore);
-                continue;
-            }
 
             //controlliamo a che tipo di editoriali un fruitore e interssato
             try {

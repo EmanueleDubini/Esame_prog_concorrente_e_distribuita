@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * IMPLEMENTAZIONE del Client
  */
 public class FruitoreNotizieImpl extends UnicastRemoteObject implements FruitoreNotizie{
-    private final String nome;
+    private String nome;
     private final Pubblicatore stub;
 
     /**
@@ -25,9 +25,8 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
       */
     ArrayList<EditorialeTipo> tipiIscrizione = new ArrayList<>();
 
-    public FruitoreNotizieImpl(String name, Pubblicatore server) throws RemoteException {
+    public FruitoreNotizieImpl(Pubblicatore server) throws RemoteException {
         super();
-        this.nome = name;
         this.stub = server;
     }
 
@@ -52,6 +51,11 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         return nome;
     }
 
+    @Override
+    public void setNome(String nome) throws RemoteException {
+        this.nome = nome;
+    }
+
     private void exec() throws RemoteException {
         sottoscrizioneCasuale();
 
@@ -66,11 +70,11 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
             int scelta = ThreadLocalRandom.current().nextInt(0, 10);
 
-            if (scelta <= 3) {
-                //se scelta e uguale a 1,2,3 o 4 si sottoscrive ad un altro editoriale
+            if (scelta <= 5) {
+                //se scelta e uguale a 1,2,3,4 o 5 si sottoscrive ad un altro editoriale
                 sottoscrizioneCasuale();
-            } else if (scelta <= 5) {
-                //se scelta e uguale a 5 o 6 si disiscrive da un editoriale a cui è iscritto
+            } else if (scelta <= 7) {
+                //se scelta e uguale a 6 o 7 si disiscrive da un editoriale a cui è iscritto
                 disiscrizioneCasuale();
             }
             //altrimenti non viene fatta nessuna azione
@@ -80,7 +84,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
     public void sottoscrizioneCasuale() throws RemoteException {
         EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
         if(!tipiIscrizione.contains(tipo)) {
-            System.out.println(ProgUtili.ANSI_GREEN + nome + ": mi sottoscrivo all'editoriale di tipo " + tipo + ProgUtili.ANSI_RESET);
+            System.out.println(ProgUtili.ANSI_GREEN + "mi sottoscrivo all'editoriale di tipo " + tipo + ProgUtili.ANSI_RESET);
 
             //aggiorniamo le iscrizioni del FruitoreNotizie, localmente e remotamente
             tipiIscrizione.add(tipo);
@@ -95,7 +99,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         if(!tipiIscrizione.isEmpty()){
             EditorialeTipo tipologia = tipiIscrizione.get(indice);
 
-            System.out.println(ProgUtili.ANSI_CYAN  + nome + ": mi disiscrivo all'editoriale di tipo " + tipologia + ProgUtili.ANSI_RESET);
+            System.out.println(ProgUtili.ANSI_CYAN  + "mi disiscrivo all'editoriale di tipo " + tipologia + ProgUtili.ANSI_RESET);
 
             tipiIscrizione.remove(tipologia);
             stub.disiscrivi(tipologia, this);
@@ -105,6 +109,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     public static void main(String[] args)  {
 
+        ProgUtili.clearScreen();
         System.out.println("il client e stato implementato in modo che esegua all'infinito");
 
         try {
@@ -113,7 +118,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
             Pubblicatore stub = (Pubblicatore) registry.lookup("Pubblicatore");
 
 
-            FruitoreNotizieImpl me = new FruitoreNotizieImpl("Pippo", stub);//todo definire i nomi dei client dal server
+            FruitoreNotizieImpl me = new FruitoreNotizieImpl(stub);
 
 
 
@@ -128,7 +133,6 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
             System.err.println("SERVER NOT STARTED");
         }
 
-        //todo gestire quando viene avviato prima il client del server
 
 
     }

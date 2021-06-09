@@ -19,5 +19,6 @@ public interface FruitoreNotizie extends Remote {
     public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException; // passa l'editoriale da stampare
     public void avviso(String avviso) throws RemoteException;
     public String getNome() throws RemoteException; //richiesta del nome del Client
+    public void setNome(String nome) throws RemoteException; //setta il nome del client
 
 }
