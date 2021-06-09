@@ -9,8 +9,7 @@ public class ServerMain {
     // MAIN
     public static void main(String[] args) {
 
-
-
+        presentazione();
         try {
             PubblicatoreImpl obj = new PubblicatoreImpl(); // oggetto locale
             Registry registry = LocateRegistry.createRegistry(Pubblicatore.PORT); // registry avviato automaticamente
@@ -32,6 +31,19 @@ public class ServerMain {
         }
 
     }//END_Main
+
+    private static void presentazione() {
+        System.out.println("********************************************************\n" +
+                "*\n" +
+                "* PROGRAMMAZIONE CONCORRENTE E DISTRUBUITA AA. 2020/21 *\n" +
+                "*\n" +
+                "* CASALNOVO Giacomo | 740003 | Como\n" +
+                "* DUBINI Emanuele | 740954 | Como\n" +
+                "*\n" +
+                "* (C) UnInsubria.it\n" +
+                "*\n" +
+                "*******************************************************");
+    }
 
     private static void creazioneNotizie(){
 

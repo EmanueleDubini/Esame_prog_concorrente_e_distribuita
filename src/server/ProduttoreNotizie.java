@@ -1,8 +1,5 @@
 package server;
 
-import common.Editoriale;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
