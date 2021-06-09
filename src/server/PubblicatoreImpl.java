@@ -2,6 +2,7 @@ package server;
 
 import client.FruitoreNotizie;
 import common.Editoriale;
+import common.EditorialeTipo;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -58,7 +59,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         //synchronized perchè possono essere chiamati da client multipli
 
         //nome del fruitore che chiama il metodo sottoscrivi
-        String nomeFruitore = fruitoreNotizia.getName();
+        String nomeFruitore = fruitoreNotizia.getNome();
 
         if (listaFruitori.containsKey(nomeFruitore)) {
             //se il nome del fruitore e contenuto nella lista fruitori, quindi e gia abbonato a un editoriale
@@ -156,7 +157,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         //synchronized perchè possono essere chiamati da client multipli
 
         //nome del fruitore che chiama il metodo sottoscrivi
-        String nomeFruitore = fruitoreNotizia.getName();
+        String nomeFruitore = fruitoreNotizia.getNome();
 
         if (listaFruitori.containsKey(nomeFruitore)) {
             //se il nome del fruitore e contenuto nella lista fruitori, quindi e gia abbonato a un editoriale
@@ -202,12 +203,18 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                     //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
                     break;
             }
-        } else {
+
+            if(!abbonato.isPolitica() && !abbonato.isAttualita() && !abbonato.isScienza() && !abbonato.isSport()){
+                //se un Fruitore notizie non ha piu nessuna sottoscrizione a nessun editoriale allora viene tolto dalla memoria del server
+                listaFruitori.remove(abbonato);
+                fruitoreNotizia.avviso("SERVER: fruitore non ancora sottoscritto a nessun editoriale");
+            }
+        }
             //eseguito se il fruitore non è gia salvato nel server, non ha richiesto ancora nessun editoriale, avvisiamo che il fruitore non e sottoscritto a nessun editoriale
 
-            fruitoreNotizia.avviso("SERVER: fruitore non ancora sottoscritto a nessun editoriale");
 
-        }
+
+
     }
 
     // IMPLEMENTAZIONE METODI chiamati dal Thread ProduttoreNotizie
@@ -247,33 +254,49 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * dopodiche elimina le notizie trasmesse dagli editoriali per poter contenere le nuove notizie generate
      */
     public synchronized void trasmettiEditorialiAlClient() {
+        ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
         for (InfoAbbonato fruitore : this.listaFruitori.values()) {
             //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
+
+            if(!fruitore.isPolitica() && !fruitore.isAttualita() && !fruitore.isScienza() && !fruitore.isSport()){
+                //se un Fruitore notizie non ha piu nessuna sottoscrizione a nessun editoriale allora viene tolto dalla memoria del server
+                listaFruitori.remove(fruitore);
+                continue;
+            }
 
             //controlliamo a che tipo di editoriali un fruitore e interssato
             try {
                 FruitoreNotizie client = fruitore.getFruitoreRemoto();
                 if (fruitore.isPolitica()) {
                     //trasmetto al client l'editoriale
-                    client.trasmettiEditoriale(raccoltaEditoriali.get(0));
+                    editorialiCondivisi.add(raccoltaEditoriali.get(0));
+
+                    //client.trasmettiEditoriale(raccoltaEditoriali.get(0));
                 }
 
                 if (fruitore.isAttualita()) {
                     //trasmetto al client l'editoriale
-                    client.trasmettiEditoriale(raccoltaEditoriali.get(1));
+                    editorialiCondivisi.add(raccoltaEditoriali.get(1));
+
+                    //client.trasmettiEditoriale(raccoltaEditoriali.get(1));
                 }
 
                 if (fruitore.isScienza()) {
                     //trasmetto al client l'editoriale
-                    client.trasmettiEditoriale(raccoltaEditoriali.get(2));
+                    editorialiCondivisi.add(raccoltaEditoriali.get(2));
+
+                    //client.trasmettiEditoriale(raccoltaEditoriali.get(2));
                 }
 
                 if (fruitore.isSport()) {
                     //trasmetto al client l'editoriale
-                    client.trasmettiEditoriale(raccoltaEditoriali.get(3));
-                }
+                    editorialiCondivisi.add(raccoltaEditoriali.get(3));
 
-                client.avviso("-------------------------------------------------------------------------------");
+                    //client.trasmettiEditoriale(raccoltaEditoriali.get(3));
+                }
+                //trasmissione degli editoriali al client
+                client.trasmettiEditoriale(editorialiCondivisi);
+
             } catch (RemoteException e) {
                 System.err.println("Server: Client communication failed");
             }

@@ -4,6 +4,7 @@ import common.Editoriale;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  * INTERFACCIA del Client
@@ -15,8 +16,8 @@ public interface FruitoreNotizie extends Remote {
 
     // METODI remoti chiamati dal Server
 
-    public void trasmettiEditoriale(Editoriale value) throws RemoteException; // passa l'editoriale da stampare
+    public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException; // passa l'editoriale da stampare
     public void avviso(String avviso) throws RemoteException;
-    public String getName() throws RemoteException; //richiesta del nome del Client
+    public String getNome() throws RemoteException; //richiesta del nome del Client
 
 }

@@ -1,6 +1,5 @@
 package common;
 
-import server.EditorialeTipo;
 import java.io.Serializable;
 
 
@@ -41,6 +40,6 @@ public class Editoriale implements Serializable {
 
     @Override
     public String toString() {
-        return "Editoriale: " + tipo.toString() + " \nContenuto: " + (contenuto.equals("")? "nessun contenuto" : contenuto)  + "\n";
+        return "Editoriale: " + tipo.toString() + " \nContenuto: " + (contenuto.equals("")? "nessun contenuto" : contenuto);
     }
 }

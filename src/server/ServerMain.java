@@ -10,22 +10,13 @@ public class ServerMain {
     // MAIN
     public static void main(String[] args) {
 
-        presentazione();
+        ProgUtili.clearScreen();
+        ProgUtili.stampaPresentazione();
+
         try {
             PubblicatoreImpl obj = new PubblicatoreImpl(); // oggetto locale
             Registry registry = LocateRegistry.createRegistry(Pubblicatore.PORT); // registry avviato automaticamente
             registry.rebind("Pubblicatore", obj);
-            ProgUtili.clearScreen();
-            System.out.println("********************************************************");
-            System.out.println("*                                                      *");
-            System.out.println("* PROGRAMMAZIONE CONCORRENTE E DISTRUBUITA AA. 2020/21 *");
-            System.out.println("*                                                      *");
-            System.out.println("*  CASALNOVO Giacomo    | 740003 | Como                *");
-            System.out.println("*  DUBINI Emanuele      | 740954 | Como                *");
-            System.out.println("*                                                      *");
-            System.out.println("*  (C) UnInsubria.it                                   *");
-            System.out.println("*                                                      *");
-            System.out.println("********************************************************\n");
 
             System.out.println("Server Pubblicatore: " + IpAddressServer.getServerAddress() + " Pronto...");
             System.out.println("Thread Produttori Notizie partiti");
@@ -42,19 +33,6 @@ public class ServerMain {
         }
 
     }//END_Main
-
-    private static void presentazione() {
-        System.out.println("********************************************************\n" +
-                "*\n" +
-                "* PROGRAMMAZIONE CONCORRENTE E DISTRUBUITA AA. 2020/21 *\n" +
-                "*\n" +
-                "* CASALNOVO Giacomo | 740003 | Como\n" +
-                "* DUBINI Emanuele | 740954 | Como\n" +
-                "*\n" +
-                "* (C) UnInsubria.it\n" +
-                "*\n" +
-                "*******************************************************");
-    }
 
     private static void creazioneNotizie(){
 
