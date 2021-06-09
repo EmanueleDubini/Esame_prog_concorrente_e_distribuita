@@ -29,6 +29,7 @@ public class ProduttoreNotizie extends Thread{
             } catch (InterruptedException e) {
                 System.err.println("ProduttoreNotizie exception: " + e.toString());
                 e.printStackTrace();
+                //todo se avanza tempo usare Timer
             }
         }
     }

@@ -16,6 +16,7 @@ public interface FruitoreNotizie extends Remote {
     // METODI remoti chiamati dal Server
 
     public void notifica(Editoriale value) throws RemoteException; // passa l'editoriale da stampare
+    public void giaSottoscritto() throws RemoteException;
     public String getName() throws RemoteException; //richiesta del nome del Client
 
 }
