@@ -36,7 +36,7 @@ public class IpAddressServer {
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
-        return ip.strip();
+        return ip;
 
     }//END_Method
 }//END_Class
