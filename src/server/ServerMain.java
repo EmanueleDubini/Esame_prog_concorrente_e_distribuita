@@ -15,9 +15,16 @@ public class ServerMain {
             PubblicatoreImpl obj = new PubblicatoreImpl(); // oggetto locale
             Registry registry = LocateRegistry.createRegistry(Pubblicatore.PORT); // registry avviato automaticamente
             registry.rebind("Pubblicatore", obj);
-            creazioneNotizie();
-            Thread.sleep(1000);
+
             System.out.println("Server Pubblicatore: " + IpAddressServer.getServerAddress() + " Pronto...");
+
+            System.out.println("Thread Produttori Notizie partiti");
+            //per permettere una corretta lettura delle stampe sulla console si inserisce una sleep, in modo tale di eseguire le due stampe e poi schedulare i thread ProduttoreNotizia
+            Thread.sleep(3000);
+            creazioneNotizie();
+
+
+
             obj.exec();
         } catch (Exception e){
             System.err.println("Server exception: " + e.toString());
@@ -27,6 +34,7 @@ public class ServerMain {
     }//END_Main
 
     private static void creazioneNotizie(){
+
         ProduttoreNotizie pn1 = new ProduttoreNotizie(); pn1.start();
         ProduttoreNotizie pn2 = new ProduttoreNotizie(); pn2.start();
         ProduttoreNotizie pn3 = new ProduttoreNotizie(); pn3.start();

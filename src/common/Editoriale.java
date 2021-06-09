@@ -1,9 +1,8 @@
 package common;
 
-import client.FruitoreNotizie;
 import server.EditorialeTipo;
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 /**
  * Oggetto condiviso Editoriale(tipo, contenuto) che deve essere Serializable
@@ -20,6 +19,14 @@ public class Editoriale implements Serializable {
         //this.contenuto = contenuto;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public void setContenuto(String contenuto) {
+        this.contenuto = contenuto;
+    }
+
     public String getContenuto() {
         return contenuto;
     }
@@ -34,6 +41,6 @@ public class Editoriale implements Serializable {
 
     @Override
     public String toString() {
-        return "Tipo: " + tipo.toString() + " Contenuto: " + contenuto;
+        return "Editoriale: " + tipo.toString() + " \nContenuto: " + (contenuto.equals("")? "nessun contenuto" : contenuto)  + "\n";
     }
 }

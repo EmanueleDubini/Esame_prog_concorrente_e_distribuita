@@ -18,7 +18,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * pos1 = politica, pos2 = attualita, pos3 = scienza, pos4 = sport
      */
     private static  ArrayList<Editoriale> raccoltaEditoriali; // contiene i 4 editoriali
-    private static final int P = 5; //intervallo di tempo per ogni esecuzione delle azioni del metodo exec()
+
+    private static final int P = 5000; //intervallo di tempo per ogni esecuzione delle azioni del metodo exec()
 
     /**
      * hash map che per ogni FruitorNotizie registrato al server, salva come chiave il nome del Fruitore e come valore le sue informazioni.
@@ -47,10 +48,10 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
     /**
      * metodo che aggiunge un FruitoreNotizie che si vuole abbonare ad un editoriale inserendolo nella lista degli abbonati ad un editoriale
-     * @param tipo
-     * @param fruitoreNotizia
+     * @param tipo tipo di editoriale a cui ci si vuole sottoscrivere
+     * @param fruitoreNotizia riferimento al client che invoca il metodo
      * @return boolean true se il metodo va a buon fine
-     * @throws RemoteException
+     * @throws RemoteException RemoteException
      */
     @Override
     public synchronized boolean sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
@@ -146,10 +147,9 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
     /**
      * metodo che rimuove un FruitoreNotizie che si vuole disiscrivere ad un editoriale modificando la lista degli abbonati ad un editoriale
-     * @param tipo
-     * @param fruitoreNotizia
-     * @return boolean true se il metodo va a buon fine
-     * @throws RemoteException
+     * @param tipo tipo di editoriale a cui ci si vuole disiscrivere
+     * @param fruitoreNotizia riferimento al client che invoca il metodo
+     * @throws RemoteException RemoteException
      */
     @Override
     public synchronized void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
@@ -218,25 +218,26 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * @param notizia notizia da aggiungere
      */
     public synchronized static void registraNotizia(EditorialeTipo tipo, String notizia) {
+        //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
         switch(tipo){
             case politica:
                 Editoriale editorialePolitica = raccoltaEditoriali.get(0);
-                editorialePolitica.concatenaNotizia(notizia);
+                editorialePolitica.concatenaNotizia(notizia + ",");
                 break;
 
             case attualita:
                 Editoriale editorialeAttualita = raccoltaEditoriali.get(1);
-                editorialeAttualita.concatenaNotizia(notizia);
+                editorialeAttualita.concatenaNotizia(notizia + ",");
                 break;
 
             case scienza:
                 Editoriale editorialeScienza = raccoltaEditoriali.get(2);
-                editorialeScienza.concatenaNotizia(notizia);
+                editorialeScienza.concatenaNotizia(notizia + ",");
                 break;
 
             case sport:
                 Editoriale editorialeSport = raccoltaEditoriali.get(3);
-                editorialeSport.concatenaNotizia(notizia);
+                editorialeSport.concatenaNotizia(notizia + ",");
                 break;
         }
     }
@@ -245,25 +246,73 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * Metodo che viene chiamato ogni 5 secondi dal server che trasmette tutti gli editoriali ai feruitoriNotizie interessati,
      * dopodiche elimina le notizie trasmesse dagli editoriali per poter contenere le nuove notizie generate
      */
-    private synchronized void trasmettiEditorialiAlClient() {
+    public synchronized void trasmettiEditorialiAlClient() {
+        for (InfoAbbonato fruitore : this.listaFruitori.values()) {
+            //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
+
+            //controlliamo a che tipo di editoriali un fruitore e interssato
+            try {
+                FruitoreNotizie client = fruitore.getFruitoreRemoto();
+                if (fruitore.isPolitica()) {
+                    //trasmetto al client l'editoriale
+                    client.trasmettiEditoriale(raccoltaEditoriali.get(0));
+                }
+
+                if (fruitore.isAttualita()) {
+                    //trasmetto al client l'editoriale
+                    client.trasmettiEditoriale(raccoltaEditoriali.get(1));
+                }
+
+                if (fruitore.isScienza()) {
+                    //trasmetto al client l'editoriale
+                    client.trasmettiEditoriale(raccoltaEditoriali.get(2));
+                }
+
+                if (fruitore.isSport()) {
+                    //trasmetto al client l'editoriale
+                    client.trasmettiEditoriale(raccoltaEditoriali.get(3));
+                }
+
+                client.avviso("-------------------------------------------------------------------------------");
+            } catch (RemoteException e) {
+                System.err.println("Server: Client communication failed");
+            }
+
+            //pulizia delle notizie all'interno dei vari editoriali che sono stati appena trasmessi
+
+            for(Editoriale editoriale : raccoltaEditoriali){
+                editoriale.setContenuto("");
+            }
+        }
     }
 
-    // Esegue le azioni della macchina a stati (trasmette editoriale T-cancella elenco notizie di T)
+
+    /**
+     * Esegue le azioni della macchina a stati (trasmette editoriale T - cancella elenco notizie di T) ogni P secondi
+     *
+     * Il Pubblicatore, rimane in attesa da richieste da parte dei FruitoreNotizie ed esegue ogni P secondi le seguenti operazioni, per ogni tipo T di editoriale:
+     *
+     * • trasmette l’editoriale di tipo T a tutti i FruitoreNotizie interessati a quel tipo di editoriale
+     * • cancella l'elenco delle notizie associate all’editoriale di tipo T, in modo che la prossima notizia
+     *   da un ProduttoreNotizie venga aggiunta alla stringa vuota, e quindi l’editoriale contenga solo
+     *   notizie nuove.
+     */
     public void exec() throws InterruptedException {
 
 
 
         while(true){
 
+            Thread.sleep(P);
 
             trasmettiEditorialiAlClient();
 
-            System.err.println(raccoltaEditoriali.get(0).toString());
+            /*System.err.println(raccoltaEditoriali.get(0).toString());
             System.err.println(raccoltaEditoriali.get(1).toString());
             System.err.println(raccoltaEditoriali.get(2).toString());
-            System.err.println(raccoltaEditoriali.get(3).toString());
+            System.err.println(raccoltaEditoriali.get(3).toString());*/
 
-            Thread.sleep(5000);
+
         }
     }
 

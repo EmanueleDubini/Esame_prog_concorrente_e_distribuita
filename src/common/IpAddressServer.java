@@ -30,7 +30,7 @@ public class IpAddressServer {
                     if (addr instanceof Inet6Address) continue;
 
                     ip = addr.getHostAddress();
-                    System.out.println(iface.getDisplayName() + " " + ip);
+                    //System.out.println(iface.getDisplayName() + " " + ip);
                 }
             }
         } catch (SocketException e) {
