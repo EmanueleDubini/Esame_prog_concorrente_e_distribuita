@@ -1,8 +1,31 @@
 
+Una volta estratto il file CasalnovoDubini.zip verra mostrato:
+
+- una cartella "Esame" che contiene i file .java suddivisi in due cartelle, "client" e "server", le quali contengono tutto il necessario
+  per eseguire i due programmi singolarmente e in ambiente distribuito
+
+- una cartella "src" contenente i file .java dell'intero progetto (comprendente client e server), utilizzabili per aprire il progetto tramite un IDE
 Compilazione e preparazione, supponendo che i sorgenti siano in /Desktop/esame
 
-(per Windows \Desktop\esame)
 
+
+
+Esecuzione da IDE:
+-------------
+Passaggi:
+1) Creare un nuovo progetto utilizzando l'ide di programmazione preferita
+2) Aprire la cartella "src" estratta dal file CasalnovoDubini.zip e copiare tutti i file .java contenuti al suo interno
+3) Incollare i file copiati nella cartella "src" del progetto all'interno della propria IDE
+
+Ora il progetto è pronto per essere utilizzato
+
+
+
+Esecuzione da Terminale:
+-------------
+(Note Preliminari: a scopo semplificativo si considerera il percorso delle due cartelle "client" e "server", contenute nella cartella "esame", equivalente a:  ~/Desktop/esame)
+
+La fase di compilazione ed esecuzione equivale sia per l'applicazione CLient che per quella Server.
 
 
 Compilazione:
@@ -10,7 +33,7 @@ Compilazione:
 
 - Creare una directory vuota, per esempio sul Desktop, e chiamarla "esame"
 
-- Copiare tutti i files con estensione .java dalla dir /src del file compresso nella cartella "esame"
+- Copiare tutti i files con estensione .java, del "client" o del "server", dalla dir /src del file compresso nella cartella "esame"
 
 - Aprire una finestra del terminale e raggiungere tramite il percorso la posizione della cartella "esame"
 
