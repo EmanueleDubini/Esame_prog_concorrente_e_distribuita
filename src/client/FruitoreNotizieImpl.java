@@ -10,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -121,6 +122,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         me.exec();
 
         //todo gestire quando viene avviato prima il client del server
+
 
     }
 

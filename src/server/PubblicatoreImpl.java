@@ -302,10 +302,10 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
             }
 
             //pulizia delle notizie all'interno dei vari editoriali che sono stati appena trasmessi
-
-            for(Editoriale editoriale : raccoltaEditoriali){
-                editoriale.setContenuto("");
-            }
+        }
+        
+        for(Editoriale editoriale : raccoltaEditoriali){
+            editoriale.setContenuto("");
         }
     }
 
