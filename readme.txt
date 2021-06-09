@@ -5,8 +5,9 @@ Una volta estratto il file CasalnovoDubini.zip verra mostrato:
   per eseguire i due programmi singolarmente e in ambiente distribuito
 
 - una cartella "src" contenente i file .java dell'intero progetto (comprendente client e server), utilizzabili per aprire il progetto tramite un IDE
-Compilazione e preparazione, supponendo che i sorgenti siano in /Desktop/esame
 
+
+Compilazione e preparazione, supponendo che i sorgenti siano in /Desktop/esame
 
 
 
@@ -23,9 +24,12 @@ Ora il progetto è pronto per essere utilizzato
 
 Esecuzione da Terminale:
 -------------
-(Note Preliminari: a scopo semplificativo si considerera il percorso delle due cartelle "client" e "server", contenute nella cartella "esame", equivalente a:  ~/Desktop/esame)
+(Note Preliminari: a scopo esemplificativo si considera il percorso delle due cartelle "client" e "server",
+contenute nella cartella "esame", equivalente a:  ~/Desktop/esame/<client_server>)
 
-La fase di compilazione ed esecuzione equivale sia per l'applicazione CLient che per quella Server.
+La fase di compilazione ed esecuzione equivale sia per l'applicazione Client che per quella Server.
+
+NOTA: è possibile anche usare direttamente la cartella "esame" già preconfigurata.
 
 
 Compilazione:
@@ -62,7 +66,9 @@ terminale 4 (Client-n):
 cd ~/Desktop/esame
 java FruitoreNotizieImpl
 
+
 (NOTA)
+-----
 Il programma puo essere eseguito specificando l'indirizzo ip del server:
 
 java FruitoreNotizieImpl <ip_del_server>
