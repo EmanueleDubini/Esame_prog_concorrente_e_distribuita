@@ -77,3 +77,5 @@ per ogni terminale in cui si vuole eseguire il client in un ambiente distribuito
 L'indirizzo del server viene stampato nel suo relativo terminale nel momento in cui viene mandato in esecuzione, offrendo la possibilita di copiarlo
 
 Nel caso in cui non verra specificato alcun indirizzo ip al momento dell'esecuzione verra considerato in automatico dall'applicazione quello del LOCAL-HOST
+
+SE SERVER E CLIENT SONO ESEGUITI SU DUE MACCHINE REMOTE DIFFERENTI, L'INDIRIZZO IP DEVE OBBLIGATORIAMENTE ESSERE SPECIFICATO AL LANCIO DEL CLIENT.

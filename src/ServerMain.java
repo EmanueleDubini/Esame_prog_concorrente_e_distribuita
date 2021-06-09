@@ -5,6 +5,9 @@ public class ServerMain {
     // MAIN
     public static void main(String[] args) {
 
+        // settiamo l'ip hostname con l'ip della macchina che esegue questo codice, ServerCV main()
+        System.setProperty("java.rmi.server.hostname", IpAddressServer.getServerAddress());
+
         ProgUtili.clearScreen();
         ProgUtili.stampaPresentazione();
 
