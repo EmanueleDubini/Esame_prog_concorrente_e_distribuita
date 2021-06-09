@@ -8,6 +8,8 @@ import java.util.HashMap;
  */
 public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicatore {
     private static final long serialVersionUID = 1L;
+    //variabile per generare identificatori del client
+    long i = 0;
     /**
     * Arraylist raccortaEditoriali continene i 4 tipi di editoriali possibili:
      * pos1 = politica, pos2 = attualita, pos3 = scienza, pos4 = sport
@@ -39,14 +41,14 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         return editoriali;
     }
 
-    private String nomeUnivoco() {
-        long i = 0;
+    // IMPLEMENTAZIONE METODI remoti chiamati dal Client
+
+    @Override
+    public String nomeUnivoco() throws RemoteException {
         i++;
         return "Fruitore-" + i;
     }
 
-
-    // IMPLEMENTAZIONE METODI remoti chiamati dal Client
 
     /**
      * metodo che aggiunge un FruitoreNotizie che si vuole abbonare ad un editoriale inserendolo nella lista degli abbonati ad un editoriale
@@ -60,8 +62,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
         //synchronized perchè possono essere chiamati da client multipli
 
         //setta il nome del fruitore che chiama il metodo sottoscrivi, il nome viene scelto dal server dato che è l'entita che conoscera tutti i client
-        String nomeFruitore = nomeUnivoco();
-        fruitoreNotizia.setNome(nomeFruitore);
+        String nomeFruitore = fruitoreNotizia.getNome();
 
         if (listaFruitori.containsKey(nomeFruitore)) {
             //se il nome del fruitore e contenuto nella lista fruitori, quindi e gia abbonato a un editoriale
@@ -219,6 +220,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
 
     }
+
 
     // IMPLEMENTAZIONE METODI chiamati dal Thread ProduttoreNotizie
 

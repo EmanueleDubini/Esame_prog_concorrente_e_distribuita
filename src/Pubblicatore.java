@@ -18,4 +18,7 @@ public interface Pubblicatore extends Remote {
     // tipo void perche se il Client si disconnette il server non ci puo fare nulla, senza controllo
     public void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException;
 
+    // restituisce al client che invoca il metodo un nome per assegnarglielo
+    public String nomeUnivoco() throws RemoteException;
+
 }

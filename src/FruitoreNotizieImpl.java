@@ -17,8 +17,9 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
       */
     ArrayList<EditorialeTipo> tipiIscrizione = new ArrayList<>();
 
-    public FruitoreNotizieImpl(Pubblicatore server) throws RemoteException {
+    public FruitoreNotizieImpl(String nome, Pubblicatore server) throws RemoteException {
         super();
+        this.nome = nome;
         this.stub = server;
     }
 
@@ -76,7 +77,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
     public void sottoscrizioneCasuale() throws RemoteException {
         EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
         if(!tipiIscrizione.contains(tipo)) {
-            System.out.println(ProgUtili.ANSI_GREEN + "mi sottoscrivo all'editoriale di tipo " + tipo + ProgUtili.ANSI_RESET);
+            System.out.println(ProgUtili.ANSI_GREEN + nome + ": mi sottoscrivo all'editoriale di tipo " + tipo + ProgUtili.ANSI_RESET);
 
             //aggiorniamo le iscrizioni del FruitoreNotizie, localmente e remotamente
             tipiIscrizione.add(tipo);
@@ -91,7 +92,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         if(!tipiIscrizione.isEmpty()){
             EditorialeTipo tipologia = tipiIscrizione.get(indice);
 
-            System.out.println(ProgUtili.ANSI_CYAN  + "mi disiscrivo all'editoriale di tipo " + tipologia + ProgUtili.ANSI_RESET);
+            System.out.println(ProgUtili.ANSI_CYAN + nome + ": mi disiscrivo all'editoriale di tipo " + tipologia + ProgUtili.ANSI_RESET);
 
             tipiIscrizione.remove(tipologia);
             stub.disiscrivi(tipologia, this);
@@ -110,7 +111,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
             Pubblicatore stub = (Pubblicatore) registry.lookup("Pubblicatore");
 
 
-            FruitoreNotizieImpl me = new FruitoreNotizieImpl(stub);
+            FruitoreNotizieImpl me = new FruitoreNotizieImpl(stub.nomeUnivoco(), stub);
 
 
 
