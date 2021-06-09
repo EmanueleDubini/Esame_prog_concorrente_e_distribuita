@@ -1,8 +1,3 @@
-package server;
-
-import common.IpAddressServer;
-import common.ProgUtili;
-
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 

@@ -1,16 +1,8 @@
-package client;
-
-import common.Editoriale;
-import common.EditorialeTipo;
-import common.ProgUtili;
-import server.Pubblicatore;
-
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**

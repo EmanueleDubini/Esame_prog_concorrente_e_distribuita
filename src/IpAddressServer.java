@@ -1,6 +1,3 @@
-
-package common;
-
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;

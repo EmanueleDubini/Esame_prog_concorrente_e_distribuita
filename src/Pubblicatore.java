@@ -1,8 +1,3 @@
-package server;
-
-import client.FruitoreNotizie;
-import common.EditorialeTipo;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

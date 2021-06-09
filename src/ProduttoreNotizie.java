@@ -1,7 +1,3 @@
-package server;
-
-import common.EditorialeTipo;
-
 import java.util.Random;
 
 /**
