@@ -24,6 +24,11 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      */
     private final HashMap<String, InfoAbbonato> listaFruitori = new HashMap<>();
 
+    /**
+     * metodo trasmissiojne
+     */
+    ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
+
 
     /**
      * COSTRUTTORE
@@ -259,7 +264,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * dopodiche elimina le notizie trasmesse dagli editoriali per poter contenere le nuove notizie generate
      */
     public synchronized void trasmettiEditorialiAlClient() {
-        ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
+        //ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
         for (InfoAbbonato fruitore : this.listaFruitori.values()) {
             //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
 
@@ -296,6 +301,9 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                 }
                 //trasmissione degli editoriali al client
                 client.trasmettiEditoriale(editorialiCondivisi);
+
+                //puliamo l'arraylist prima che lo usi il fruitore successivo
+                editorialiCondivisi.clear();
 
             } catch (RemoteException e) {
                 System.err.println("Server: Client communication failed");

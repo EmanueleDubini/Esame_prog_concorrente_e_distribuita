@@ -2,6 +2,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ProgUtili {
+
+    /**
+     * Creazione colori usati per stampare le informazioni sul terminale
+     */
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -20,15 +24,6 @@ public class ProgUtili {
         System.out.flush();
     }
 
-    /**
-     * Stampa la data odierna.
-     * @return La data in formato gg-mm-aaaa.
-     */
-    public static String stampaData() {
-        Date oggi = new Date(); // Data di oggi
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
-        return sdf.format(oggi);
-    }
 
     public static void stampaPresentazione(){
         System.out.println("********************************************************");

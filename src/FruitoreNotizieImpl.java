@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * IMPLEMENTAZIONE del Client
+ * il client e stato implementato in modo che esegua all'infinito
  */
 public class FruitoreNotizieImpl extends UnicastRemoteObject implements FruitoreNotizie{
     private String nome;
@@ -14,7 +15,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     /**
      * Contiene tutti gli editoriali a cui un FruitoreNotizie e sottoscritto
-      */
+     */
     ArrayList<EditorialeTipo> tipiIscrizione = new ArrayList<>();
 
     public FruitoreNotizieImpl(String nome, Pubblicatore server) throws RemoteException {
@@ -24,7 +25,12 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
     }
 
 
-
+    /**
+     * Metodo che trasmette un Arraylist con cli editoriali da stampare e poi lo svuota quando
+     * li ha trasmessi
+     * @param editorialiCondivisi
+     * @throws RemoteException
+     */
     @Override
     public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException {
         for(Editoriale editoriale : editorialiCondivisi){
@@ -36,6 +42,9 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         System.out.flush(); //todo vedere se serve
     }
 
+    /**
+     * Avverte che un fruitore e gia sottoscritto a un contenuto
+     */
     @Override
     public void avviso(String avviso) throws RemoteException{
         System.out.println(avviso);
@@ -50,6 +59,11 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
     public void setNome(String nome) throws RemoteException {
         this.nome = nome;
     }
+
+    /**
+     * Esecuzione del Client
+     * @throws RemoteException
+     */
 
     private void exec() throws RemoteException {
         sottoscrizioneCasuale();
@@ -76,6 +90,10 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         }
     }
 
+    /**
+     * Metodo che in automatico sottoscrive il Client a un editoriale casuale
+     * @throws RemoteException
+     */
     public void sottoscrizioneCasuale() throws RemoteException {
         EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
         if(!tipiIscrizione.contains(tipo)) {
@@ -87,6 +105,10 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
         }
     }
 
+    /**
+     * Metodo che in automatico disicrive il Client da un editoriale casuale
+     * @throws RemoteException
+     */
     public void disiscrizioneCasuale() throws RemoteException {
         int indice = (int)(Math.random() * tipiIscrizione.size());
 
@@ -104,18 +126,18 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     public static void main(String[] args)  {
 
-        ProgUtili.clearScreen();
-        System.out.println("il client e stato implementato in modo che esegua all'infinito");
+        ProgUtili.clearScreen(); // pulisce lo schermo
+        System.out.println("***************************");
+        System.out.println("** FRUITORE-NOTIZIE-IMPL **");
+        System.out.println("***************************\n");
+
 
         try {
-            String host = args.length >= 1 ? args[0] : null;
+            String host = args.length >= 1 ? args[0] : null;    //argomenti della linea di comando (ip_address / localhost)
             Registry registry = LocateRegistry.getRegistry(host, FruitoreNotizie.PORT);
             Pubblicatore stub = (Pubblicatore) registry.lookup("Pubblicatore");
 
-
             FruitoreNotizieImpl me = new FruitoreNotizieImpl(stub.nomeUnivoco(), stub);
-
-
 
             /*stub.sottoscrivi(EditorialeTipo.politica, me);
             stub.sottoscrivi(EditorialeTipo.attualita, me);
@@ -125,7 +147,7 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
             me.exec();
 
         }catch(Exception e){
-            System.err.println("SERVER NOT STARTED");
+            System.err.println("SERVER NOT STARTED"); // gestione dell'eccezione se il Client parte prima del Server
         }
 
 

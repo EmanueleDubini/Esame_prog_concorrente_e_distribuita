@@ -29,9 +29,11 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
     public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException {
         for(Editoriale editoriale : editorialiCondivisi){
             System.out.println(editoriale.toString());
+            System.out.flush(); //todo vedere se serve
 
         }
         System.out.println("------------------------------------------------------------------------");
+        System.out.flush(); //todo vedere se serve
     }
 
     @Override

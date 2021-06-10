@@ -1,5 +1,6 @@
 /**
- * per ogni FruitoreNotizie che si registra, il server crea un oggetto IndoAbbonato e ci inserire il reference remoto del fruitore e gli editoriali a cui è iscritto
+ * per ogni FruitoreNotizie che si registra, il server crea un oggetto IndoAbbonato e ci inserire il reference
+ * remoto del fruitore e gli editoriali a cui è iscritto
  */
 public class InfoAbbonato {
     private final FruitoreNotizie fruitoreRemoto;
