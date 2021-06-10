@@ -2,12 +2,16 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class ServerMain {
-    // MAIN
+    /**
+     * Metodo main dell'applicazzione Server, entry point da cui avviare
+     * @param args indirizzo ip del server a cui si desidera connettersi
+     */
     public static void main(String[] args) {
 
         // settiamo l'ip hostname con l'ip della macchina che esegue questo codice, ServerCV main()
         System.setProperty("java.rmi.server.hostname", IpAddressServer.getServerAddress());
 
+        //metodi di servizio
         ProgUtili.clearScreen();
         ProgUtili.stampaPresentazione();
 
