@@ -306,7 +306,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                 editorialiCondivisi.clear();
 
             } catch (RemoteException e) {
-                System.err.println("Server: Client communication failed");
+                System.err.println("SERVER: Un Client si è disconnesso");
             }
 
             //pulizia delle notizie all'interno dei vari editoriali che sono stati appena trasmessi
