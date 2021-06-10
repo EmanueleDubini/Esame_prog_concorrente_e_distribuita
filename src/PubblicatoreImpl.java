@@ -230,7 +230,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
             if(!abbonato.isPolitica() && !abbonato.isAttualita() && !abbonato.isScienza() && !abbonato.isSport()){
                 //se un Fruitore notizie non ha piu nessuna sottoscrizione a nessun editoriale allora viene tolto dalla memoria del server
-                listaFruitori.remove(nomeFruitore, abbonato);
+                //listaFruitori.remove(nomeFruitore, abbonato);
+                listaFruitori.remove(nomeFruitore);
                 fruitoreNotizia.avviso("SERVER: fruitore non possiede sottoscrizioni a nessun editoriale");
             }
         }
@@ -310,7 +311,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                 editorialiCondivisi.clear();
 
             } catch (RemoteException e) {
-                System.err.println("SERVER: Un Client si e' disconnesso");
+                //se si raggiunge questo punto del codice vuol dire che un client si e disconnesso
             }
         }
 
