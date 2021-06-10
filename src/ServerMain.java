@@ -2,19 +2,24 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class ServerMain {
+
     /**
      * Metodo main dell'applicazzione Server, entry point da cui avviare
-     * @param args indirizzo ip del server a cui si desidera connettersi
+     *
+     * @param args indirizzo ip del server
      */
     public static void main(String[] args) {
 
         // settiamo l'ip hostname con l'ip della macchina che esegue questo codice, ServerCV main()
+        // questa impostazione viene applicata per poter eseguire i vari programmi concorrentemente su dispositivi diversi specificando all'avvio
+        //(lato client) l'indirizzo del server a cui connettersi
         System.setProperty("java.rmi.server.hostname", IpAddressServer.getServerAddress());
 
         //metodi di servizio
         ProgUtili.clearScreen();
         ProgUtili.stampaPresentazione();
 
+        //crea un oggetto del server che passera al registry mettendosi in ascolto su una determinata porta
         try {
             PubblicatoreImpl obj = new PubblicatoreImpl(); // oggetto locale
             Registry registry = LocateRegistry.createRegistry(Pubblicatore.PORT); // registry avviato automaticamente

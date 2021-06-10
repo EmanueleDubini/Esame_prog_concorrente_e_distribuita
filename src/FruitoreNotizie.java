@@ -8,13 +8,43 @@ import java.util.ArrayList;
  */
 public interface FruitoreNotizie extends Remote {
 
+    /**
+     * porta su cui il server si rende disponibile
+     */
     public final static int PORT = 1200;
 
     // METODI remoti chiamati dal Server
 
-    public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException; // passa l'editoriale da stampare
-    public void avviso(String avviso) throws RemoteException; // avverte che un fruitore e gia sottoscritto a un contenuto
-    public String getNome() throws RemoteException; // richiesta del nome del Client
-    public void setNome(String nome) throws RemoteException; // setta il nome del client
+    /**
+     * metodo chiamato remotamente dal server come callback per condividere al client gli editoriali che verranno poi stampati
+     *
+     * @param editorialiCondivisi editoriali condivisi
+     * @throws RemoteException RemoteException
+     */
+    public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException;
+
+    /**
+     * metodo chiamato remotamente dal server come callback per trasmettere un avviso al client
+     *
+     * @param avviso l'avviso da trasmettere
+     * @throws RemoteException RemoteException
+     */
+    public void avviso(String avviso) throws RemoteException;
+
+    /**
+     * metodo chiamato remotamente dal server come callback per ottenere il nome di un istanza del client
+     *
+     * @return String nome dell'istanza
+     * @throws RemoteException RemoteException
+     */
+    public String getNome() throws RemoteException;
+
+    /**
+     * metodo chiamato remotamente dal server come callback per settare il nome di un client
+     *
+     * @param nome nome da impostare
+     * @throws RemoteException RemoteException
+     */
+    public void setNome(String nome) throws RemoteException;
 
 }

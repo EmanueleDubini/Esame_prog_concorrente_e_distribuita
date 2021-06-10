@@ -10,7 +10,19 @@ import java.util.concurrent.ThreadLocalRandom;
  * il client e stato implementato in modo che esegua all'infinito
  */
 public class FruitoreNotizieImpl extends UnicastRemoteObject implements FruitoreNotizie{
+    /**
+     * serialVersionUID per la comunicazione seriale
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * nome dell'istanza del client
+     */
     private String nome;
+
+    /**
+     * riferimento all'oggetto remoto server
+     */
     private final Pubblicatore stub;
 
     /**
@@ -18,6 +30,13 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
      */
     ArrayList<EditorialeTipo> tipiIscrizione = new ArrayList<>();
 
+    /**
+     * Costruttore
+     *
+     * @param nome nome da assegnare all'oggetto creato
+     * @param server riferimento remoto al server
+     * @throws RemoteException RemoteException
+     */
     public FruitoreNotizieImpl(String nome, Pubblicatore server) throws RemoteException {
         super();
         this.nome = nome;
@@ -27,34 +46,49 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     /**
      * Metodo che trasmette un Arraylist con cli editoriali da stampare e poi lo svuota quando
-     * li ha trasmessi
-     * @param editorialiCondivisi
-     * @throws RemoteException
+     * sono stati trasmessi
+     *
+     * @param editorialiCondivisi lista di editoriali ricevuti
+     * @throws RemoteException RemoteException
      */
     @Override
     public void trasmettiEditoriale(ArrayList<Editoriale> editorialiCondivisi) throws RemoteException {
         for(Editoriale editoriale : editorialiCondivisi){
             System.out.println(editoriale.toString());
-            System.out.flush(); //todo vedere se serve
+            System.out.println("\n");
+            System.out.flush();
 
         }
         System.out.println("------------------------------------------------------------------------");
-        System.out.flush(); //todo vedere se serve
+        System.out.flush();
     }
 
     /**
-     * Avverte che un fruitore e gia sottoscritto a un contenuto
+     * Trasmette un avviso al client il quale lo stampa
      */
     @Override
     public void avviso(String avviso) throws RemoteException{
         System.out.println(avviso);
     }
 
+
+    /**
+     * Restituisce il nome dell'istanza del client
+     *
+     * @return nome dell'istanza
+     * @throws RemoteException RemoteException
+     */
     @Override
     public String getNome() throws RemoteException {
         return nome;
     }
 
+    /**
+     * Setta il nome dell'istanza del client
+     *
+     * @param nome nome da impostare
+     * @throws RemoteException RemoteException
+     */
     @Override
     public void setNome(String nome) throws RemoteException {
         this.nome = nome;
@@ -62,9 +96,9 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     /**
      * Esecuzione del Client
-     * @throws RemoteException
+     *
+     * @throws RemoteException RemoteException
      */
-
     private void exec() throws RemoteException {
         sottoscrizioneCasuale();
 
@@ -92,7 +126,8 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     /**
      * Metodo che in automatico sottoscrive il Client a un editoriale casuale
-     * @throws RemoteException
+     *
+     * @throws RemoteException RemoteException
      */
     public void sottoscrizioneCasuale() throws RemoteException {
         EditorialeTipo tipo = EditorialeTipo.getEditorialeTipoCasuale();
@@ -107,7 +142,8 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     /**
      * Metodo che in automatico disicrive il Client da un editoriale casuale
-     * @throws RemoteException
+     *
+     * @throws RemoteException RemoteException
      */
     public void disiscrizioneCasuale() throws RemoteException {
         int indice = (int)(Math.random() * tipiIscrizione.size());
@@ -124,6 +160,12 @@ public class FruitoreNotizieImpl extends UnicastRemoteObject implements Fruitore
 
     }
 
+
+    /**
+     * Metodo main dell'applicazzione Client, entry point da cui avviare
+     *
+     * @param args indirizzo ip del server a cui si desidera connettersi
+     */
     public static void main(String[] args)  {
 
         ProgUtili.clearScreen(); // pulisce lo schermo

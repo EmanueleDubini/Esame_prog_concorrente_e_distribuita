@@ -7,18 +7,40 @@ import java.rmi.RemoteException;
  */
 public interface Pubblicatore extends Remote {
 
+    /**
+     * porta su cui il server si rende disponibile
+     */
     public final static int PORT = 1200;
 
     // METODI remoti chiamati dal Client
 
-    // gli passiamo il tipo di editoriale di cui fa richiesta, e un oggetto Client
-    // Boolena perche ci serve sapere se la sottoscrizione è andata a buon fine o no
+    /**
+     * metodo che permette la sottoscrizione di un client ad un tipo specifico di editoriale, una sottoscrizione per ogni metodo invocato.
+     * Una volta sottoscritto si riceveranno gli editoriali a cui si e abbonati
+     *
+     * @param tipo tido di editoriale a cui si desidera sottoscriversi
+     * @param fruitoreNotizia riferimento all'istanza del client che invoca il metodo
+     * @return true se la sottscrizione va a buon fine
+     * @throws RemoteException RemoteException
+     */
     public boolean sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException; // fa anche la connessione
 
-    // tipo void perche se il Client si disconnette il server non ci puo fare nulla, senza controllo
+    /**
+     * metodo che permette la disiscrizione di un client ad un tipo di editoriale specificato, una disiscrizione per ogni metodo.
+     * Una volta disiscritto non si riceveranno piu gli editoriali da cui si ha disdetto l'abbonamento
+     *
+     * @param tipo tipo di editoriale da cui si desidera disiscriversi
+     * @param fruitoreNotizia riferimento all'istanza del client che invoca il metodo
+     * @throws RemoteException RemoteException
+     */
     public void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException;
 
-    // restituisce al client che invoca il metodo un nome per assegnarglielo
+    /**
+     * metodo che restituisce a chi lo invoca un nome univoco per accedere al server
+     *
+     * @return String, il nome univoco
+     * @throws RemoteException
+     */
     public String nomeUnivoco() throws RemoteException;
 
 }

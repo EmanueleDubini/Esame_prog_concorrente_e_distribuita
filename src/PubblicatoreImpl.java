@@ -7,16 +7,26 @@ import java.util.HashMap;
  * IMPLEMENTAZIONE del Server
  */
 public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicatore {
+    /**
+     * serialVersionUID per la comunicazione seriale
+     */
     private static final long serialVersionUID = 1L;
-    //variabile per generare identificatori del client
+
+    /**
+     * intervallo di tempo per ogni esecuzione delle azioni del metodo exec()
+     */
+    private static final int P = 5000;
+
+    /**
+     * variabile per generare identificatori del client
+     */
     long i = 0;
+
     /**
     * Arraylist raccortaEditoriali continene i 4 tipi di editoriali possibili:
      * pos1 = politica, pos2 = attualita, pos3 = scienza, pos4 = sport
      */
     private static  ArrayList<Editoriale> raccoltaEditoriali; // contiene i 4 editoriali
-
-    private static final int P = 5000; //intervallo di tempo per ogni esecuzione delle azioni del metodo exec()
 
     /**
      * hash map che per ogni FruitorNotizie registrato al server, salva come chiave il nome del Fruitore e come valore le sue informazioni.
@@ -25,7 +35,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
     private final HashMap<String, InfoAbbonato> listaFruitori = new HashMap<>();
 
     /**
-     * metodo trasmissiojne
+     * Arraylist editorialiCondividi utilizzato nel metodo "trasmettiEditorialiAlClient()" per trasmettere ai vari fruitoriNotizie gli editoriali a cui sono abbonati
      */
     ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
 
@@ -48,6 +58,11 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
     // IMPLEMENTAZIONE METODI remoti chiamati dal Client
 
+    /**
+     * metodo che quando viene invocato restituisce un nome per il client che desidera colegarsi al server, per essere identificato
+     * @return String l'identificatore
+     * @throws RemoteException
+     */
     @Override
     public String nomeUnivoco() throws RemoteException {
         i++;
@@ -64,9 +79,9 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      */
     @Override
     public synchronized boolean sottoscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
-        //synchronized perchè possono essere chiamati da client multipli
+        //synchronized perche possono essere chiamati da client multipli
 
-        //setta il nome del fruitore che chiama il metodo sottoscrivi, il nome viene scelto dal server dato che è l'entita che conoscera tutti i client
+        //setta il nome del fruitore che chiama il metodo sottoscrivi, il nome viene scelto dal server dato che e l'entita che conoscera tutti i client
         String nomeFruitore = fruitoreNotizia.getNome();
 
         if (listaFruitori.containsKey(nomeFruitore)) {
@@ -78,8 +93,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
             switch (tipo) {
                 case politica:
                     if (abbonato.isPolitica()) {
-                        //il fruitore è gia abbonato a questo editoriale
-                        //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
+                        //il fruitore e gia abbonato a questo editoriale
+                        //avviso che il fruitore e gia sottoscritto all'editoriale richiesto
                         fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale politica");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
@@ -90,8 +105,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
                 case attualita:
                     if (abbonato.isAttualita()) {
-                        //il fruitore è gia abbonato a questo editoriale
-                        //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
+                        //il fruitore e gia abbonato a questo editoriale
+                        //avviso che il fruitore e gia sottoscritto all'editoriale richiesto
                         fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale attualita");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
@@ -102,8 +117,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
                 case scienza:
                     if (abbonato.isScienza()) {
-                        //il fruitore è gia abbonato a questo editoriale
-                        //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
+                        //il fruitore e gia abbonato a questo editoriale
+                        //avviso che il fruitore e gia sottoscritto all'editoriale richiesto
                         fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale scienza");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
@@ -114,8 +129,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
 
                 case sport:
                     if (abbonato.isSport()) {
-                        //il fruitore è gia abbonato a questo editoriale
-                        //avviso che il fruitore è gia sottoscritto all'editoriale richiesto
+                        //il fruitore e gia abbonato a questo editoriale
+                        //avviso che il fruitore e gia sottoscritto all'editoriale richiesto
                         fruitoreNotizia.avviso("SERVER: fruitore gia sottoscritto all'editoriale sport");
                     }else {
                         //abbono il fruitore al nuovo editoriale che ha richiesto
@@ -127,7 +142,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
             return false;
 
         } else {
-            //eseguito se il fruitore non è gia salvato nel server, non ha richiesto ancora nessun editoriale, lo salviamo settando di che tipo di editoriale vuole ricevere notizie
+            //eseguito se il fruitore non e gia salvato nel server, non ha richiesto ancora nessun editoriale, lo salviamo settando di che tipo di editoriale vuole ricevere notizie
 
             InfoAbbonato info = new InfoAbbonato(fruitoreNotizia);
 
@@ -163,7 +178,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      */
     @Override
     public synchronized void disiscrivi(EditorialeTipo tipo, FruitoreNotizie fruitoreNotizia) throws RemoteException {
-        //synchronized perchè possono essere chiamati da client multipli
+        //synchronized perche possono essere chiamati da client multipli
 
         //nome del fruitore che chiama il metodo sottoscrivi
         String nomeFruitore = fruitoreNotizia.getNome();
@@ -178,38 +193,38 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
             switch (tipo) {
                 case politica:
                     if (abbonato.isPolitica()) {
-                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+                        //il fruitore e abbonato a questo editoriale, lo disiscrivo
 
                         abbonato.setPolitica(false);
                     }
-                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    //altrimenti, il fruitore non e abbonato a questo editoriale, non succede nulla
                     break;
 
                 case attualita:
                     if (abbonato.isAttualita()) {
-                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+                        //il fruitore e abbonato a questo editoriale, lo disiscrivo
 
                         abbonato.setAttualita(false);
                     }
-                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    //altrimenti, il fruitore non e abbonato a questo editoriale, non succede nulla
                     break;
 
                 case scienza:
                     if (abbonato.isScienza()) {
-                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+                        //il fruitore e abbonato a questo editoriale, lo disiscrivo
 
                         abbonato.setScienza(false);
                     }
-                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    //altrimenti, il fruitore non e abbonato a questo editoriale, non succede nulla
                     break;
 
                 case sport:
                     if (abbonato.isSport()) {
-                        //il fruitore è abbonato a questo editoriale, lo disiscrivo
+                        //il fruitore e abbonato a questo editoriale, lo disiscrivo
 
                         abbonato.setSport(false);
                     }
-                    //altrimenti, il fruitore non è abbonato a questo editoriale, non succede nulla
+                    //altrimenti, il fruitore non e abbonato a questo editoriale, non succede nulla
                     break;
             }
 
@@ -219,11 +234,6 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                 fruitoreNotizia.avviso("SERVER: fruitore non possiede sottoscrizioni a nessun editoriale");
             }
         }
-            //eseguito se il fruitore non è gia salvato nel server, non ha richiesto ancora nessun editoriale, avvisiamo che il fruitore non e sottoscritto a nessun editoriale
-
-
-
-
     }
 
 
@@ -235,6 +245,8 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * @param notizia notizia da aggiungere
      */
     public synchronized static void registraNotizia(EditorialeTipo tipo, String notizia) {
+        //synchronized perche possono essere chiamati da client multipli
+
         //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
         switch(tipo){
             case politica:
@@ -264,7 +276,7 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      * dopodiche elimina le notizie trasmesse dagli editoriali per poter contenere le nuove notizie generate
      */
     public synchronized void trasmettiEditorialiAlClient() {
-        //ArrayList<Editoriale> editorialiCondivisi = new ArrayList<>();
+        //leggiamo ogni fruitore abbonato ad almeno un editoriale e ne iniviamo gli editoriali
         for (InfoAbbonato fruitore : this.listaFruitori.values()) {
             //raccoltaEditoriali[0] = politica, raccoltaEditoriali[0] = attualita, raccoltaEditoriali[0] = scienza, raccoltaEditoriali[0] = sport
 
@@ -275,29 +287,21 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
                 if (fruitore.isPolitica()) {
                     //trasmetto al client l'editoriale
                     editorialiCondivisi.add(raccoltaEditoriali.get(0));
-
-                    //client.trasmettiEditoriale(raccoltaEditoriali.get(0));
                 }
 
                 if (fruitore.isAttualita()) {
                     //trasmetto al client l'editoriale
                     editorialiCondivisi.add(raccoltaEditoriali.get(1));
-
-                    //client.trasmettiEditoriale(raccoltaEditoriali.get(1));
                 }
 
                 if (fruitore.isScienza()) {
                     //trasmetto al client l'editoriale
                     editorialiCondivisi.add(raccoltaEditoriali.get(2));
-
-                    //client.trasmettiEditoriale(raccoltaEditoriali.get(2));
                 }
 
                 if (fruitore.isSport()) {
                     //trasmetto al client l'editoriale
                     editorialiCondivisi.add(raccoltaEditoriali.get(3));
-
-                    //client.trasmettiEditoriale(raccoltaEditoriali.get(3));
                 }
                 //trasmissione degli editoriali al client
                 client.trasmettiEditoriale(editorialiCondivisi);
@@ -308,10 +312,9 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
             } catch (RemoteException e) {
                 System.err.println("SERVER: Un Client si è disconnesso");
             }
-
-            //pulizia delle notizie all'interno dei vari editoriali che sono stati appena trasmessi
         }
 
+        //pulizia delle notizie all'interno dei vari editoriali che sono stati appena trasmessi
         for(Editoriale editoriale : raccoltaEditoriali){
             editoriale.setContenuto("");
         }
@@ -329,20 +332,17 @@ public class PubblicatoreImpl extends UnicastRemoteObject implements Pubblicator
      *   notizie nuove.
      */
     public void exec() throws InterruptedException {
-
+        //metodo che non ha bisogno di essere synchronized e che permette l'esecuzione ciclica del metodo di stampa degli editoriali
+        //se mettessimo anche questo metodo synchronized ogni volta che viene eseguito questo (e magari contiene piu istruzioni della singola " trasmettiEditorialiAlClient(); "), gli altri metodi del server non potrebbero venire eseguiti in concorrenza da qualche client e il thread del server avrebbe il lock dell'oggetto
+        //anche se questa cosa avviene solo durante il cambio di stato del server
 
 
         while(true){
 
-            Thread.sleep(P);
+            Thread.sleep(P); //quando e in sleep e sarebbe un metodo synchronized manterrebbe il lock e quindi non permetterebbe ai thread di usufruire dei metodi remoti del server
 
+            //trasmissione editoriali ai fruitoriNotizie
             trasmettiEditorialiAlClient();
-
-            /*System.err.println(raccoltaEditoriali.get(0).toString());
-            System.err.println(raccoltaEditoriali.get(1).toString());
-            System.err.println(raccoltaEditoriali.get(2).toString());
-            System.err.println(raccoltaEditoriali.get(3).toString());*/
-
 
         }
     }

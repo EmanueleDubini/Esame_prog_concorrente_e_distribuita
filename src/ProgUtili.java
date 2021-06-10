@@ -25,6 +25,9 @@ public class ProgUtili {
     }
 
 
+    /**
+     * metodo di stampa di una presentazione
+     */
     public static void stampaPresentazione(){
         System.out.println("********************************************************");
         System.out.println("*                                                      *");
