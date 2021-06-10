@@ -3,6 +3,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Definizione dei tipi di un editoriale (politica, attualita, scienza, sport)
+ */
 
 public enum EditorialeTipo {
     politica, attualita, scienza, sport;
@@ -11,6 +14,9 @@ public enum EditorialeTipo {
     private static final int SIZE = VALUES.size();
     private static final Random RANDOM = new Random();
 
+    /**
+     * Generazione casuale del tipo di un editoriale
+     */
     public static EditorialeTipo getEditorialeTipoCasuale()  {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
